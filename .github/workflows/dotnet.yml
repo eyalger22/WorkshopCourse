@@ -1,0 +1,42 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: Windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      working-directory: ./Code/Market
+      run: dotnet restore
+    - name: Build
+      working-directory: ./Code/Market
+      run: dotnet build --no-restore
+    - name: Restore donettool
+      working-directory: ./Code/Market
+      run: dotnet tool install --global dotnet-ef
+    - name: Install a SQL Server suite of tools
+      uses: potatoqualitee/mssqlsuite@v1.7
+      with:
+        install: localdb
+    - name: update database
+      working-directory: ./Code/Market/Market
+      run: dotnet-ef database update --no-build
+      continue-on-error: true
+    - name: Test
+      working-directory: ./Code/Market/TestMarket
+      run: dotnet test --no-build --verbosity normal

@@ -1,0 +1,81 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+}
+
+<h1>Discount policy managment</h1>
+
+<h4>Choose options to add policy</h4>
+<div>
+    <br />
+    <div>
+        <form asp-action="Index" asp-controller="BasicDiscount" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <button class="btn btn-primary" type="submit">Add basic discount</button>
+        </form>
+    </div>
+    <br />
+    <div>
+        <form asp-action="Index" asp-controller="ApplyPolicy" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <button class="btn btn-primary" type="submit">Apply Discount</button>
+        </form>
+    </div>
+    <br />
+    <div>
+        <form asp-action="Index" asp-controller="AddPredicats" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <button class="btn btn-primary" type="submit">Add Predicats</button>
+        </form>
+    </div>
+    <br />
+        <div>
+        <form asp-action="Index" asp-controller="ConditionalDiscount" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <button class="btn btn-primary" type="submit">Add Conditional Discount</button>
+        </form>
+    </div>
+    <br />
+    <div>
+        <form asp-action="Index" asp-controller="NumericDiscount" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <button class="btn btn-primary" type="submit">Add Numerical Discount</button>
+        </form>
+    </div>
+    <br />
+
+</div>
+<br />
+<br />
+<div id="message" class="alert"></div>
+@section Scripts{
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+
+
+
+
+
+
+}

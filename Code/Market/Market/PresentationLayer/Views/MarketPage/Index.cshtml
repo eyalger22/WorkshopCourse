@@ -1,0 +1,206 @@
+﻿@model Market.Pages.Modles.UserModel
+@*<a class="nav-link text-dark" asp-action="Home" asp-controller="MarketPage" asp-route-id="@Model.id">Home</a>
+<a class="nav-link text-dark" asp-action="Index">Index</a>*@
+@{
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    List<dynamic> shops = null;
+    if (TempData["SerializedShop"] != null)
+    {
+        string serializedshps = TempData["SerializedShop"] as string;
+        shops = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(serializedshps);
+    }
+    dynamic shop = null;
+    if (TempData["shop"] != null)
+    {
+        string serialize = TempData["shop"] as string;
+        shop = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(serialize);
+    }
+
+    List<dynamic> alerts = null;
+    if (TempData["serializedAlerts"] != null)
+    {
+        string serializealerts = TempData["serializedAlerts"] as string;
+        alerts = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(serializealerts);
+    }
+    
+    
+}
+
+
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+
+    <style>
+        .product-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .product-box .info {
+            flex: 0 1 70%;
+        }
+
+        .list-item {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .list-item::before {
+            content: "\2022"; /* Unicode character for a bullet point */
+            margin-right: 0px;
+            font-size: 28px;
+            padding: 20px;
+            left: 0;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    @if (alerts!= null && alerts.Count > 0)
+    {
+        @foreach(var a in alerts)
+        {
+            <p class="list-item">@a</p>
+
+        }
+    }
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the market</h1>
+</div>
+
+
+<br /><br />
+    <div class="info">
+        <form asp-action="Search" asp-controller="MarketPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <div class="form-group">
+                <input id="shopname" name="shopname"  class="col-5" onchange="checkInput()" />
+                <button id="ButtonSearch" type="submit" class="btn btn-primary" disabled>Search shops</button>
+            </div>
+
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+
+    </div>
+    <br /><br />
+
+    @if (shops != null && shops.Count > 0)
+    {
+    <h2>All Shops</h2>
+
+    <div class="search-results">
+            @foreach (var s in shops)
+        {
+                <a class="nav-link text-dark" asp-action="Index" asp-controller="ShopBuyers" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@s.ShopId" asp-route-product="@Model.product">
+                <div class="product-box">
+                    <div class="info">
+                        <p>name: <strong>@s.Name</strong></p>
+                            <p>Address: <strong>@s.ShopAddress</strong></p>
+                    </div>
+                </div>
+            </a>
+        }
+        </div>
+    }
+    else
+    {
+        @if (shop != null)
+        {
+            <a class="nav-link text-dark" asp-action="Index" asp-controller="ShopBuyers" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@shop.ShopId" asp-route-product="@Model.product">
+                <div class="product-box">
+                    <div class="info">
+                        <p>name: <strong>@shop.Name</strong></p>
+                        <p>Price: <strong>@shop.ShopAddress</strong></p>
+                    </div>
+                </div>
+            </a>
+        }
+        else
+        {
+            <p>No shops found.</p>
+        }
+
+    }
+    <br /><br />
+    <div id="message" class="alert"></div>
+
+    </body>
+
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var amount = document.getElementById("shopname");
+            var button = document.getElementById("ButtonSearch");
+            if (amount.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+    
+}    
+
+@*<script>
+         window.addEventListener("load", function () {
+        //if (alerts != null && alerts.Count > 0)
+        //    foreach (var alert in alerts)
+        //    {
+        //        <script>
+        //            var li = document.createElement("li");
+        //            li.textContent = alert;
+        //            console.log(alert);
+        //            document.getElementById("messagesList").appendChild(li);
+        //        
+        //    }
+            var serializealerts = "@TempData["serializedAlerts"]";
+            var alerts = JSON.parse(serializealerts);
+            alerts.forEach(function (alert) {
+                    var li = document.createElement("li");
+                    li.textContent = alert;
+                    document.getElementById("messagesList").appendChild(li);
+            }
+            )
+            });
+    </script>*@
+
+
+
+

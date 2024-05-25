@@ -1,0 +1,38 @@
+﻿@page
+@model Market.Pages.ShopsModel
+@using Market.ServiceLayer
+@inject Service service
+@{
+    ViewData["Title"] = "Shops";
+}
+<form method="post">
+
+    <nav class="navbar navbar-light bg-light">
+            <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="@Model.searchInput">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </nav>
+    <div class="card-columns">
+        @foreach(var product in Model.shops)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                </div>
+            </div>
+        }
+    </div>
+    <p>@Model.bottomMessage</p>
+    @if(Model.shops.Count == 0)
+    {
+        <h5>No shop found</h5>
+    }
+</form>
+
+@section Scripts{
+    <script>
+        function SearchProducts2(){
+            @Model.shops;
+            console.log("here");
+        }
+    </script>
+}

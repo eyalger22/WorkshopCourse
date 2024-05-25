@@ -1,0 +1,16 @@
+﻿_Register:
+user12,user12,user12@gmail.com,address 12
+_Register:
+user13,user13,user13@gmail.com,address 13
+_Register:
+user14,user14,user14@gmail.com,address 14
+_Register:
+user15,user15,user15@gmail.com,address 15
+_Login:
+user12,user12
+_Shop:
+user12,shop1,address s1,bank1
+_Product:
+user12,shop1,Apple,20,Fruits,An apple,10
+_Logout:
+user12

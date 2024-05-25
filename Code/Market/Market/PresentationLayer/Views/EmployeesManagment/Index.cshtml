@@ -1,0 +1,174 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Worker Management</title>
+    <style>
+        .button-container {
+            display: inline-block;
+        }
+
+            .button-container button {
+                margin-left: 10px;
+            }
+    </style>
+</head>
+
+<body>
+    <h1>Employees Management</h1>
+    <br />
+    <div class="row">
+        <div class="col-md-5">
+            <form asp-action="Managers" asp-controller="EmployeesManagment" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+                <div class="form-group">
+                    <label class="col-4" for="EnameManeger">Employee name:</label>
+                    <input id="EnameManeger" name="EnameManeger" class="col-6" onkeyup="checkInput1()" />
+                </div>
+                <br />
+                <button type="submit" id="addManeger" name="action" class="btn btn-primary" value="makeManager" disabled>Make Manager </button>
+                <button type="submit" id="removeManeger" name="action" class="btn btn-primary" value="removeManager" disabled>Remove Manager</button>
+                <br /><br />
+                
+                @*<input type="submit" value="Login" class="btn btn-primary" />*@
+            </form>
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class="row">
+        <div class="col-md-5">
+            <form asp-action="Owners" asp-controller="EmployeesManagment" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+                <div class="form-group">
+                    <label class="col-4" for="EnameOwner">Employee name:</label>
+                    <input id="EnameOwner" name="EnameOwner" class="col-6" onkeyup="checkInput2()" />
+                </div>
+                <br />
+                <button type="submit" id="addOwner" name="action" class="btn btn-primary" value="makeOwner" disabled>Make Owner </button>
+                <button type="submit" id="removeOwner" name="action" class="btn btn-primary" value="removeOwner" disabled>Remove Owner</button>
+                <br /><br />
+
+                @*<input type="submit" value="Login" class="btn btn-primary" />*@
+            </form>
+        </div>
+    </div>
+    <br /><br /><br />
+    <div class="row">
+        <div class="col-md-5">
+
+
+            <form method="post" asp-action="Premissions" asp-controller="EmployeesManagment" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+                <div class="form-group">
+                    <label class="col-4" for="namepre">Employee name:</label>
+                    <input id="namepre" name="namepre" class="col-6" onkeyup="checkInput3()" />
+                </div>
+                <br />
+                <label class="col-4" for="managePremissions">Change Premissions</label>
+                <select id="managePremissions" name="managePremissions" onchange="checkInput3()">
+                   <option value=""></option>
+                    <option value="MANAGE_ITEMS"> Item managemant</option>
+                    <option value="MANAGE_DISCOUNTS">Discounts managemant</option>
+                    <option value="MANAGE_POLICIES">Policies managemant</option>
+                    <option value="ADD_MANAGER">Add managers</option>
+                    <option value="ADD_OWNER">Add owners</option>
+                    <option value="REMOVE_MANAGER">Remove Manegers</option>
+                    <option value="GET_EMOLOEE_INFO">Get employees information</option>
+                    <option value="GET_HISTORY_ORDERS">Get orders history</option>
+                    <option value="MANAGE_PERMISSION">Manage employees premissions</option>
+                </select><br /><br />
+                <button type="submit" id="addPre" name="action" class="btn btn-primary" value="addPre" disabled>Add Premission </button>
+                <button type="submit" id="removePre" name="action" class="btn btn-primary" value="removePre" disabled>Remove Premission</button>
+            </form>
+            </div>
+</div>
+
+<br />
+    <div id="message" class="alert"></div>
+</body>
+</html>
+
+@section Scripts{
+    <script>
+        function checkInput1() {
+            var userNameInput = document.getElementById("EnameManeger");
+            var addinput = document.getElementById("addManeger");
+            var removeinput = document.getElementById("removeManeger");
+            if (userNameInput.value.trim().length > 0 ) {
+                removeinput.disabled = false;
+                addinput.disabled = false;
+            }
+            else {
+                removeinput.disabled = true;
+                addinput.disabled = true;
+            }
+        }
+    </script>
+
+
+    <script>
+        function checkInput2() {
+            var userNameInput = document.getElementById("EnameOwner");
+            var addinput = document.getElementById("addOwner");
+            var removeinput = document.getElementById("removeOwner");
+            if (userNameInput.value.trim().length > 0) {
+                removeinput.disabled = false;
+                addinput.disabled = false;
+            }
+            else {
+                removeinput.disabled = true;
+                addinput.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkInput3() {
+            var name = document.getElementById("namepre");
+            var pre = document.getElementById("managePremissions");
+            var addbutton = document.getElementById("addPre");
+            var removebutton = document.getElementById("removePre");
+            if (name.value.trim().length > 0 && pre.value.trim().length > 0) {
+                addbutton.disabled = false;
+                removebutton.disabled = false;
+            }
+            else {
+                addbutton.disabled = true;
+                removebutton.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+}
+
+

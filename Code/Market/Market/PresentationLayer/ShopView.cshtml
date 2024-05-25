@@ -1,0 +1,14 @@
+﻿@page
+@model Market.Pages.ShopViewModel
+@{
+    ViewData["Title"] = "ShopManagement";
+}
+<div class="container">
+    <div class="row justify-content-md-center">@Model.ShopName</div>
+    <p>
+        <a href="/ShopStatistics" class="btn btn-primary">Shop statistics</a>
+    </p>
+    <p>
+        <a href="/ShopPromotion" class="btn btn-primary">Promote member</a>
+    </p>
+</div>

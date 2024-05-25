@@ -1,0 +1,139 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    List<dynamic> baskets = null;
+    if (TempData["serializedCart"] != null)
+    {
+        string serializedCart = TempData["serializedCart"] as string;
+        baskets = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(serializedCart);
+    }
+    var price = TempData["cart"];
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+
+    <style>
+        .product-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+            .product-box .info {
+                flex: 0 1 70%;
+            }
+
+    </style>
+</head>
+<body>
+<h1>My Cart</h1>
+
+@if (baskets != null && baskets.Count > 0)
+{
+    
+        @foreach (var busket in baskets)
+        {
+            <div class="search-results">
+                <p>Shop name: @busket.Item1.Item1</p>
+            @foreach (var product in @busket.Item1.Item2.Products)
+            {
+                    <div class="product-box">
+                    <a class="nav-link text-dark" asp-action="Index" asp-controller="ProductPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@product.Item1.ShopId" asp-route-product="@product.Item1.ProductId">
+                    
+                    <div class="info">
+                                <p><strong>@product.Item1.Name. </strong></p>
+                                <p><strong>Price: @product.Item1.Price. current amount:@product.Item2</strong></p>
+                                <br />
+                    </div>
+                
+                    </a>
+                    
+                    <div class="info">
+                            <form asp-action="EditAmount" asp-controller="ShoppingCart" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@product.Item1.ShopId" asp-route-product="@product.Item1.ProductId" method="post">
+                                <div class="form-group">
+                                    <label class="col-1" for="amount">Amount</label>
+                                    <input id="amount-@product.Item1.ProductId" name="amount" type="number" class="col-1" onchange="checkInput(@product.Item1.ProductId)" />
+                                <button id="Button-@product.Item1.ProductId" type="submit" class="btn btn-primary" disabled>Edit</button>
+                                </div>
+
+                                @*<input type="submit" value="Login" class="btn btn-primary" />*@
+                            </form>
+
+                    </div>
+                    </div>
+            }
+                <p>Basket price: @busket.Item2</p>
+            </div>
+        }
+        <br />
+
+    <p>Total price of cart: @price</p>
+    <br />
+        <form asp-action="Index" asp-controller="PurchaseCart" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <div class="form-group">
+                <button  type="submit" class="btn btn-primary">Purchase cart</button>
+            </div>
+
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+    <br />
+    <br />
+        
+}
+else
+{
+    <p>No products in cart.</p>
+}
+    <div id="message" class="alert"></div>
+</body>
+
+
+@section Scripts{
+    <script>
+        function checkInput(index) {
+            var Input = document.getElementById("amount-" +index);
+            var button = document.getElementById("Button-" +index);
+            if (Input.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+}
+
+

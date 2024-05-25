@@ -1,0 +1,162 @@
+﻿@model Market.PresentationLayer.Modles.ShopProductsModel;
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+}
+
+<h1>Item managment</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add_product_to_shop" asp-controller="ManageItems" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <div class="form-group">
+                <label class="col-3" for="productname">product name</label>
+                <input id="productname" name="productname" class="col-7" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="price">Price</label>
+                <input id="price" name="price" class="col-8" onchange="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="category">Category</label>
+                <input id="category" name="category" class="col-8" onchange="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-md-4" for="desciption">Description</label>
+                <input id="desciption" name="desciption" class="col-6" onchange="checkInput()" />
+            </div>
+            <br />
+            <button id="AddproductButton" type="submit" class="btn btn-primary" disabled>Add product</button>
+            <br /><br />
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+
+        <form method="post" asp-action="RemoveProduct" id="removeProductForm" asp-controller="ManageItems" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+    <label for="removeProductList">Remove from Shop:</label>
+            <select id="removeProductList" name="productId" onchange="checkInput1()">
+                <option value=""></option>
+        @foreach (var product in Model.products)
+        {
+            <option value="@product.Item1.ProductId">Name: @product.Item1.Name - ID: @product.Item1.ProductId In stock: @product.Item2</option>
+        }
+    </select><br />
+            <button id="removeButton" type="submit" class="btn btn-primary" disabled>Remove</button>
+</form>
+
+    </div>
+</div>
+<br />
+<br />
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Add_to_stock" id="add_to_stock" asp-controller="ManageItems" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+    <label for="addToStockProductList">Add to Stock:</label>
+            <select id="addToStockProductList" name="productId" onchange="checkInput2()">
+                <option value=""></option>
+        @foreach (var product in Model.products)
+        {
+                    <option value="@product.Item1.ProductId">Name: @product.Item1.Name - ID: @product.Item1.ProductId In stock: @product.Item2</option>
+        }
+    </select><br /><br />
+            <input type="number" step="1" name="amount" placeholder="Amount" id="amount" onchange="checkInput2()" />
+            <br /><br />
+            <button id="stock_button" type="submit" class="btn btn-primary" disabled>Add to Stock</button>
+</form>
+    </div>
+</div>
+<br />
+<br />
+<div id="message" class="alert"></div>
+
+
+
+
+
+@section Scripts{
+    <script>
+        function checkInput1() {
+            var name = document.getElementById("removeProductList");
+            var button = document.getElementById("removeButton");
+            if (name.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+
+    <script>
+        function checkInput() {
+            var name = document.getElementById("productname");
+            var price = document.getElementById("price");
+            var category = document.getElementById("category");
+            var description = document.getElementById("desciption");
+            var button = document.getElementById("AddproductButton");
+            if (name.value.trim().length > 0 &&
+                price.value.trim().length > 0 &&
+                category.value.trim().length > 0 &&
+                description.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkInput2() {
+            var name = document.getElementById("addToStockProductList");
+            var amount = document.getElementById("amount");
+            var button = document.getElementById("stock_button");
+            if (name.value.trim().length > 0 && amount.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+
+}
+
+

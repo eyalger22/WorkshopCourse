@@ -1,0 +1,90 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    List<dynamic> products = null;
+    if (TempData["SerializedProducts"] != null)
+    {
+        string serializedProducts = TempData["SerializedProducts"] as string;
+        products = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(serializedProducts);
+    }
+    dynamic foundshop = null;
+    if (TempData["shop"] != null)
+    {
+        string serializedProducts = TempData["shop"] as string;
+        foundshop = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(serializedProducts);
+    }
+}
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+
+    <style>
+        .product-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+            .product-box .info {
+                flex: 0 1 70%;
+            }
+
+    </style>
+</head>
+
+<body>
+
+@if (foundshop!= null)
+{
+    <h3>Wellcom to @foundshop.Name</h3>
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                <p>Address</p>
+            </dt>
+            <dd class="col-sm-10">
+                <p>@foundshop.ShopAddress</p>
+            </dd>
+        </dl>
+    </div>
+        <br />
+        @if (products != null && products.Count > 0)
+        {
+            <p>OUR PRODUCTS</p>
+            <div class="search-results">
+                @foreach (var product in products)
+                {
+                    <a class="nav-link text-dark" asp-action="Index" asp-controller="ProductPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@product.Item1.ShopId" asp-route-product="@product.Item1.ProductId">
+                        <div class="product-box">
+                            <div class="info">
+                                <p>name: <strong>@product.Item1.Name</strong></p>
+                                <p>Price: <strong>@product.Item1.Price</strong></p>
+                                <p>Category: <strong>@product.Item1.Category</strong></p>
+                                <p>Description: <strong>@product.Item1.Description</strong></p>
+                                <p>Amount in stock: <strong>@product.Item2</strong></p>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <p>No products in shop.</p>
+        }
+}
+
+</body>
+

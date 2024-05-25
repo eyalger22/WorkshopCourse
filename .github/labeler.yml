@@ -1,0 +1,6 @@
+UI: Code/Market/PresentationLayer/**
+Service: Code/Market/ServiceLayer/**
+Tests: Code/TestMarket/**
+Market: Code/Market/DomainLayer/Market/**
+Users: Code/Market/DomainLayer/Users/**
+documentation: Degign/**

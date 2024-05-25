@@ -1,0 +1,46 @@
+﻿@page
+@model Market.Pages.CartModel
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<div class="container">
+    <div class="card-columns" style="margin-block: 5px 5px">
+        @foreach(var basket in Model.cart.Baskets){
+            <div class="card" style="margin-block: 5px">
+                <div class="card-header">@basket.Item1</div>
+                <div class="card-body">
+                    <div class="card-columns">
+                        @foreach(var product in basket.Item2.Products)
+                        {
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">@product.Item1.Name</h5>
+                                    <p class="card-text">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <div class="col">Amount:@product.Item2</div>
+                                                <div class="col">Price:@product.Item1.Price</div>
+                                                <div class="col">Category:@product.Item1.Category</div>
+                                            </div>
+                                            <div class="col-2 align-items-center">
+                                                <button class="btn btn-danger">Remove from cart</button>
+                                            </div>
+                                        </div>
+                                        @product.Item1.Description
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@if(Model.cart.Baskets.Count() != 0)
+{
+    <div class="container">
+        <button class="btn btn-success">Buy cart</button>
+    </div>
+}

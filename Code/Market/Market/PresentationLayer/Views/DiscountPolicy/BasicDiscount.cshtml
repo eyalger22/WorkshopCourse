@@ -1,0 +1,134 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    dynamic policy = TempData["policy"];
+}
+<head>
+    <script>
+        function showFields() {
+            var selectValue = document.getElementById("typeList").value;
+            var kind1 = document.getElementById("kind1");
+            var kind2 = document.getElementById("kind2");
+
+            if (selectValue === "Item") {
+                kind2.style.display = "block";
+            }
+            else{
+                kind2.style.display = "none";
+            }
+            if (selectValue === "Category") {
+                kind1.style.display = "block";
+            }
+            else{
+                kind1.style.display = "none";
+            }
+            checkInput();
+        }
+    </script>
+</head>
+
+<h1>Discount policy managment</h1>
+
+<h4>Basic policies</h4>
+<br />
+<div class="row">
+    <div class="col-md-5">
+<form method="post" asp-action="Create" asp-controller="BasicDiscount" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+    <div class="form-group">
+        <label class="col-4" for="description">Description:</label>
+                <input id="description" name="description" class="col-6" onkeyup="checkInput()" />
+    </div>
+    <br />
+    <div class="form-group">
+                <label class="col-4" for="type">Discount type:</label>
+                <select id="typeList" name="typeList" onchange="showFields()">
+        <option value=""></option>
+            <option value="Shop">Shop</option>
+            <option value="Item">Item</option>
+            <option value="Category">Category</option>
+    </select></div><br />
+    <div class="form-group">
+        <label class="col-4" for="kind1">Kind of category:</label>
+                <input id="kind1" name="kind1" class="col-6" style="display: none" />
+    </div>
+            <br />
+    <div class="form-group">
+        <label class="col-4" for="kind2">Kind of Item:</label>
+                <input id="kind2" name="kind2" type="number" class="col-6" style="display: none" />
+    </div>
+            <br />
+    <div class="form-group">
+        <label class="col-2" for="discount">Discount:</label>
+                <input id="discount" step="any" name="discount" type="number" class="col-8" onkeyup="checkInput()" />
+    </div>
+            <br />
+    <button id="Button" type="submit" class="btn btn-primary" disabled >Create policy</button>
+</form>
+</div></div>
+<br />
+<br />
+<div id="message" class="alert"></div>
+
+@if (policy != null)
+{
+    @foreach (var p in policy)
+    {
+        <p>@p</p>
+    }
+
+    
+}
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var description = document.getElementById("description");
+            var typeList = document.getElementById("typeList");
+            var discount = document.getElementById("discount");
+            var button = document.getElementById("Button");
+            if (description.value.trim().length > 0 &&
+                typeList.value.trim().length > 0 &&
+                discount.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+
+
+
+
+
+
+}
+

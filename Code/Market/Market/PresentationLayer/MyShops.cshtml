@@ -1,0 +1,23 @@
+﻿@page
+@model Market.Pages.MyShopsModel
+@{
+    ViewData["Title"] = "My shops";
+}
+<p style="text-align: center">My shops</p>
+<div class="container" style="align-content:center; width:35%">
+    <div class="card-columns">
+        @foreach(var item in Model.Jobs)
+        {
+            <div class="card border-dark">
+                <div class="card-body">
+                    <div class="card-text">
+                        <div class="row">
+                            <div class="col-4">@item.Item1</div>
+                            <div class="col-4">Job: @item.Item2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

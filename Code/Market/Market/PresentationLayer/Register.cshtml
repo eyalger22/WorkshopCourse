@@ -1,0 +1,63 @@
+﻿@*page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<form method="post">
+        <div>
+            <h2>Registration</h2>
+            <hr />
+            <p>
+                <div class="row">
+                    <div class="col-2"><label for="username">Username:</label></div>
+                    <div class="col-4"><input type="text" id="username" name="Username" value="@Model.Username" onkeyup="checkInput()" /></div>
+                </div>
+            </p>
+            <p>
+                <div class="row">
+                    <div class="col-2"><label for="email">Email:</label></div>
+                    <div class="col-4"><input type="email" id="email" name="Email" value="@Model.Email" onkeyup="checkInput()" /></div>
+                </div>
+            </p>
+            <p>
+                <div class="row">
+                    <div class="col-2"><label for="password">Password:</label></div>
+                    <div class="col-4"><input type="password" id="password" name="Password" value="@Model.Password" onkeyup="checkInput()" /></div>
+                </div>
+            </p>
+            <p>
+                <div class="row">
+                    <div class="col-2"><label for="confirmPassword">Confirm Password:</label></div>
+                    <div class="col-4"><input type="password" id="confirmPassword" name="ConfirmPassword" value="@Model.ConfirmPassword" onkeyup="checkInput()" /></div>
+                </div>
+            </p>
+            <p>
+                <button id="registerButton" type="submit" class="btn btn-primary" disabled>Register</button>
+            </p>
+            <p>
+                <span style="color:red">@Model.ErrorMessage</span>
+            </p>
+        </div>
+    </form>
+
+@section Scripts{
+    <script>
+        function checkInput(){
+            var userNameInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            var confirmPasswordInput = document.getElementById("confirmPassword");
+            var emailInput = document.getElementById("email");
+            var button = document.getElementById("registerButton");
+            if (userNameInput.value.trim().length > 0 &&
+                passwordInput.value.trim().length > 0 &&
+                confirmPasswordInput.value.trim().length > 0 &&
+                emailInput.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+}@**@

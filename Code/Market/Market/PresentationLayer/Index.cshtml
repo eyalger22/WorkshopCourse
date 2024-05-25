@@ -1,0 +1,74 @@
+﻿@*@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the trading system</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<p>
+    <a href="/Products" class="btn btn-primary">Product search</a>
+</p>
+<p>
+    <a href="/Shops" class="btn btn-primary">Shop search</a>
+</p>
+<p>
+    <a href="/MyShops" class="btn btn-primary">My shops</a>
+</p>
+<p>
+    <a href="/Cart" class="btn btn-primary">View cart</a>
+</p>
+<p>
+    <a href="/PurchaseHistory" class="btn btn-primary">Purchase history</a>
+</p>
+
+<div class="container">
+    <div class="row p-1">
+        <div class="col-1">User</div>
+        <div class="col-5"><input type="text" id="userInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-1">ConnectionId</div>
+        <div class="col-5"><input type="text" id="targetConnectionId" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-1">Message</div>
+        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="Send Message" />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <hr />
+        </div>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+
+@section Scripts{
+    <script type="text/javascript">
+        function closeHandler(event) {
+            // Check if the next page to be loaded is within the same website
+            var targetUrl = event.currentTarget.URL;
+            var currentUrl = window.location.href;
+            if (targetUrl !== currentUrl && targetUrl.indexOf(window.location.origin) === -1) {
+                // Execute your action here
+                // This code will only be executed when the user leaves the website entirely
+                throw new DOMException("","");
+                console.log("User is leaving the website...");
+            }
+        }
+
+        window.addEventListener("beforeunload", closeHandler);
+    </script>
+}
+*@

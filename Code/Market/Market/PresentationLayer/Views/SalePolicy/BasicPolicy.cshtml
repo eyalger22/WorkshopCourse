@@ -1,0 +1,143 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    dynamic policy = TempData["policy"];
+}
+<h1>Discount policy managment</h1>
+
+<h4>conditional policies</h4>
+<br />
+<h6>FOR LOWER AGE POLICY ENTER THE AGE IN THE FIRST LINE</h6>
+<h6>FOR DATE SALE POLICY ENTER THE YEAR MONTH AND DAY IN THE FIRST 3 LINE</h6>
+<h6>FOR HOUR SALE POLICY ENTER THE HOUR RELATED IN THE FIRST LINE</h6>
+<h6>FOR ITEM IN BASKET SALE POLICY ENTER THE ITEM ID IN THE FIRST LINE</h6>
+<h6>FOR CATEGORY RELATED POLICIES ENTER THE CATEGORY IN THE 4 INPUT </h6>
+<h6>FOR ITEM RELATED POLICIES ENTER THE ITEM ID IN THE 5 INPUT </h6>
+<div class="row">
+    <div class="col-md-5">
+        <form method="post" asp-action="Create" asp-controller="BasicPolicy" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+            <div class="form-group">
+                <label class="col-4" for="description">Description:</label>
+                <input id="description" name="description" class="col-6"  />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-4" for="type">Discount type:</label>
+                <select id="typeList" name="typeList">
+                    <option value=""></option>
+                    <option value="Lower Age">Lower Age</option>
+                    <option value="Date Sale">Date Sale</option>
+                    <option value="Before Hour">Before Hour</option>
+                    <option value="After Hour">After Hour</option>
+                    <option value="Item Amount Less">Item Amount Less</option>
+                    <option value="Item Amount More">Item Amount More</option>
+                    <option value="Item In Basket">Item In Basket</option>
+                </select>
+            </div><br />
+            <div class="form-group">
+                <label class="col-4" for="applyon">Apply on type:</label>
+                <select id="applyon" name="applyon">
+                    <option value=""></option>
+                    <option value="Shop">Shop</option>
+                    <option value="Item">Item</option>
+                    <option value="Category">Category</option>
+                </select>
+            </div>
+<br />
+            <div class="form-group">
+                <label class="col-4" for="param1">input1:</label>
+                <input id="param1" type="number" name="param1" class="col-6"  />
+            </div>
+            <br />
+                        <div class="form-group">
+                <label class="col-4" for="param2">input2:</label>
+                <input id="param2" type="number" name="param2" class="col-6"  />
+            </div>
+            <br />
+                        <div class="form-group">
+                <label class="col-4" for="param3">input3:</label>
+                <input id="param3" type="number" name="param3" class="col-6"  />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-4" for="param4">input4:</label>
+                <input id="param4" name="param4" class="col-6"  />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-4" for="param5">input5:</label>
+                <input id="param5" type="number" name="param5" class="col-6" />
+            </div>
+            <br />
+
+            <button id="Button" type="submit" class="btn btn-primary">Create policy</button>
+        </form>
+    </div>
+</div>
+<br />
+<br />
+<div id="message" class="alert"></div>
+
+@if (policy != null)
+{
+    @foreach (var p in policy)
+    {
+        <p>@p</p>
+    }
+
+
+}
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var description = document.getElementById("description");
+            var typeList = document.getElementById("discountid");
+            var discount = document.getElementById("predicateId");
+            var button = document.getElementById("Button");
+            if (description.value.trim().length > 0 &&
+                typeList.value.trim().length > 0 &&
+                discount.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+
+
+
+
+
+
+}
+

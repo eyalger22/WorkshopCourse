@@ -1,0 +1,100 @@
+﻿@model Market.Pages.Modles.UserModel
+
+<h2>Register</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Register" asp-controller="Register" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+    <div class="form-group">
+        <label class="col-2" for="username">Username</label>
+        <input id="username" name="username" class="col-8" onkeyup="checkInput()" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="col-2" for="email">Email</label>
+                <input id="email" name="email" class="col-8" onkeyup="checkInput()" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="col-2" for="password">Password</label>
+                <input id="password" name="password" type="password" class="col-8" onkeyup="checkInput()" />
+    </div>
+    <br />
+    <div class="form-group">
+                <label class="col-md-4" for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" class="col-6" onkeyup="checkInput()" />
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label class="col-2" for="address">Address</label>
+                <input id="address" name="address" class="col-8" onkeyup="checkInput()" />
+    </div>
+    <br />
+            <div class="form-group">
+                <label class="col-2" for="phone">Phone</label>
+                <input id="phone" name="phone" class="col-8" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="birthday">Birthday</label>
+                <input id="birthday" name="birthday" type="date" class="col-8" onchange="checkInput()" />
+            </div>
+    <br />
+    <button id="registerButton" type="submit" class="btn btn-primary" disabled>Register</button>
+    <br /><br/>
+    <div id="message" class="alert"></div>
+    @*<input type="submit" value="Login" class="btn btn-primary" />*@
+</form>
+</div>
+</div>
+
+
+
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var userNameInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            var confirmPasswordInput = document.getElementById("confirmPassword");
+            var emailInput = document.getElementById("email");
+            var button = document.getElementById("registerButton");
+            var address = document.getElementById("address");
+            var phone = document.getElementById("phone");
+            var birthdayInput = document.getElementById("birthday");
+            if (userNameInput.value.trim().length > 0 &&
+                passwordInput.value.trim().length > 0 &&
+                address.value.trim().length > 0 &&
+                phone.value.trim().length > 0 &&
+                confirmPasswordInput.value.trim().length > 0 &&
+                emailInput.value.trim().length > 0 &&
+                birthdayInput.value) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+}

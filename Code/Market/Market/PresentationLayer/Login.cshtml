@@ -1,0 +1,61 @@
+﻿@page
+@model Market.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<form method="post">
+    <div>
+        <h2>Login</h2>
+        <hr />
+        <div class="container">
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-2"><label for="username">Username:</label></div>
+                <div class="col-4"><input type="text" id="username" name="Username" value="@Model.Username" onkeyup="checkInput()"/></div>
+            </div>
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-2"><label for="password">Password:</label></div>
+                <div class="col-4"><input type="password" id="password" name="Password" value="@Model.Password" onkeyup="checkInput()" /></div>
+            </div>
+            <p><button type="submit" id="loginButton" class="btn btn-primary" disabled>Login</button></p>
+            <div class="row"><span style="color:red">@Model.ErrorMessage</span></div>
+        </div>
+        <hr />
+        <p>
+            Dont have an account? register <a href="/Register">here</a>
+        </p>
+        
+    </div>
+</form>
+
+<script>
+    document.getElementById("loginButton").addEventListener("click", function (event) {
+        var user = document.getElementById("username").value;
+        var pass = document.getElementById("password").value;
+        console.log("login button clicked");
+        document.cookie = user;
+        connection.invoke("Login", user, pass).catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    });
+</script>
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var userNameInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            var button = document.getElementById("loginButton");
+            if (userNameInput.value.trim().length > 0 &&
+                passwordInput.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+}
+
+

@@ -1,0 +1,71 @@
+﻿@model Market.PresentationLayer.Modles.MyShopsModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+}
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+<h1 text-align="center">My shops</h1>
+<br />
+
+<div id="message" class="alert"></div>
+<br />
+<div>
+    <form asp-action="Open_shop" asp-controller="MyShop" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+        <button class="btn btn-primary" type="submit">Open new shop</button>
+    </form>
+</div>
+<br />
+<div class="text-center">
+    @if (TempData["shops"] != null)
+    {
+        <h2>@TempData["shops"]</h2>
+    }
+    else{
+    <br />
+    <h3>Your Shops:</h3>
+            <ul class="list-group">
+                @foreach (var shop in Model.shop_list)
+                {
+                    <a class="no-underline" asp-action="EnterShop" asp-controller="MyShop" asp-route-id="@Model.id"
+               asp-route-mode="@Model.mode" asp-route-shop="@shop.ShopId" asp-route-product="@Model.product">
+                    <li class="list-group-item">
+                            <span class="shop-name">@shop.Name:</span>
+                            <span class="shop-address">@shop.ShopAddress</span>
+                        <span class="shop-address">  @shop.ShopId</span>
+                    </li>
+                    </a>
+                }
+            </ul>
+    }
+
+</div>
+</body>
+
+
+@section Scripts{
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                messageElement.classList.add("alert-success");
+            }
+        }
+
+        setInterval(checkMessage, 750);
+    </script>
+}

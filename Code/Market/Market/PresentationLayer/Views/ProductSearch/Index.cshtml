@@ -1,0 +1,127 @@
+﻿@model Market.Pages.Modles.UserModel
+
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    List<dynamic> products = null;
+    if (TempData["SerializedProducts"] != null)
+    {
+        string serializedProducts = TempData["SerializedProducts"] as string;
+        products = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(serializedProducts);
+    }
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+
+    <style>
+        .product-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+            .product-box .info {
+                flex: 0 1 70%;
+            }
+
+    </style>
+</head>
+<body>
+
+<h1>Product search page</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Search" asp-controller="ProductSearch" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <div class="form-group">
+                <label class="col-3" for="productname">Product name</label>
+                <input id="productname" name="productname" class="col-7" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-3" for="productid">Product ID</label>
+                <input id="productid" name="productid" class="col-7" type ="number"/>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="minprice">Min price</label>
+                <input id="minprice" name="minprice" type="number" class="col-8" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-md-4" for="maxprice">Max price</label>
+                <input id="maxprice" name="maxprice" type="number" class="col-6" />
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label class="col-2" for="category">Category</label>
+                <input id="category" name="category" class="col-8" />
+            </div>
+            <br />
+            <button id="Button" type="submit" class="btn btn-primary" >Search</button>
+            <br /><br />
+            <div id="message" class="alert"></div>
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+    </div>
+</div>
+
+@if (products != null && products.Count > 0)
+{
+    <h2>Search Results</h2>
+
+    <div class="search-results">
+        @foreach (var product in products)
+        {
+            <a class="nav-link text-dark" asp-action="Index" asp-controller="ProductPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@product.ShopId" asp-route-product="@product.ProductId">
+                <div class="product-box">
+                    <div class="info">
+                        <p>name: <strong>@product.Name</strong></p>
+                            <p>ID: <strong>@product.ProductId</strong></p>
+                        <p>Price: <strong>@product.Price</strong></p>
+                        <p>Category: <strong>@product.Category</strong></p>
+                        <p>Description: <strong>@product.Description</strong></p>
+                        <p>Shop name: <strong>@product.ShopName</strong></p>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <p>No products found.</p>
+}
+</body>
+
+
+@section Scripts{
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                messageElement.classList.add("alert-danger");
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+}

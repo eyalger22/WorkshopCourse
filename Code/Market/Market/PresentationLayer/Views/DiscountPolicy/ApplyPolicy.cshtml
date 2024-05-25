@@ -1,0 +1,73 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    dynamic policy = TempData["policy"];
+}
+
+<h1>Discount policy managment</h1>
+
+<h4>Apply policies</h4>
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Apply" asp-controller="ApplyPolicy" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+            <div class="form-group">
+                <label class="col-4" for="policyid">Policy Id:</label>
+                <input id="policyid" name="policyid" class="col-6" />
+            </div>
+            <br />
+            <button id="Button" type="submit" class="btn btn-primary">Create policy</button>
+        </form>
+    </div>
+</div>
+<br />
+<br />
+<div id="message" class="alert"></div>
+
+@if (policy != null)
+{
+    @foreach (var p in policy)
+    {
+        <p>@p</p>
+    }
+
+
+}
+
+@section Scripts{
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+
+
+
+
+
+
+}
+

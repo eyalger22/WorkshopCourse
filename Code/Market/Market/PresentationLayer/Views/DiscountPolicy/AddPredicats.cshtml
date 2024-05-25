@@ -1,0 +1,107 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    dynamic policy = TempData["policy"];
+}
+
+<h1>Discount policy managment</h1>
+
+<h4>Add predicats</h4>
+<br />
+<h6>FOR LOGICAL DISCOUNT ENTER PREDICATS ID. ITEM PREDICATS ENTER ITEM ID AND AMOUNT</h6>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Create" asp-controller="AddPredicats" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">
+            <br />
+            <div class="form-group">
+                <label class="col-4" for="type">Discount type:</label>
+                <select id="typeList" name="typeList" onchange="checkInput()">
+                    <option value=""></option>
+                    <option value="And">And</option>
+                    <option value="Or">Or</option>
+                    <option value="Xor">Xor</option>
+                    <option value="Amount Less">Less Then Items In Basket</option>
+                    <option value="Amount More">More Then Items In Basket</option>
+                    <option value="Item In Basket">Has Item In Basket</option>
+                </select>
+            </div><br />
+            <div class="form-group">
+                <label for="id1">Input1:</label>
+                <input id="id1" name="id1" class="col-6" type="number" onchange="checkInput()">
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="id2">Input2:</label>
+                <input  id="id2" name="id2" class="col-6" type="number" >
+            </div>
+            <br />
+            <button id="Button" type="submit" class="btn btn-primary" disabled>Create predicate</button>
+        </form>
+    </div>
+</div>
+<br />
+<br />
+<div id="message" class="alert"></div>
+
+@if (policy != null)
+{
+    @foreach (var p in policy)
+    {
+        <p>@p</p>
+    }
+
+
+}
+
+@section Scripts{
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+
+    <script>
+        function checkInput() {
+            var id1 = document.getElementById("id1");
+            var typeList = document.getElementById("typeList");
+            var button = document.getElementById("Button");
+            if (id1.value.trim().length > 0 &&
+                typeList.value.length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+
+
+
+
+
+}
+

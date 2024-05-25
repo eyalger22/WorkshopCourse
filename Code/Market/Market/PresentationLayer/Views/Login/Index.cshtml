@@ -1,0 +1,68 @@
+﻿@model Market.Pages.Modles.UserModel
+
+<h2>Loign</h2>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+<form asp-action="Login" asp-controller="Login" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+    <div class="form-group">
+        <label class="col-2" for="username">Username</label>
+                <input id="username" name="username" class="col-8" onkeyup="checkInput()" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="col-2" for="password">Password</label>
+                <input id="password" name="password" type="password" class="col-8" onkeyup="checkInput()" />
+    </div>
+    <br />
+    <button id="loginButton" type="submit" class="btn btn-primary" disabled>Login</button>
+     <br /><br />
+    <div id="message" class="alert"></div>
+    @*<input type="submit" value="Login" class="btn btn-primary" />*@
+</form>
+</div>
+</div>
+<a asp-action="Index" asp-controller="MarketPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product">Back to List</a>
+
+
+
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var userNameInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            var button = document.getElementById("loginButton");
+            if (userNameInput.value.trim().length > 0 &&
+                passwordInput.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+}

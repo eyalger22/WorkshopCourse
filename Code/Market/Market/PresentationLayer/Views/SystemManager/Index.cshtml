@@ -1,0 +1,95 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+}
+
+
+<div>
+    <h4>Wellcom Systme manager</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-5">
+            <form asp-action="Remove_member" asp-controller="SystemManager" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+                <div class="form-group">
+                    <label class="col-4" for="member">Memeber to remove</label>
+                    <input id="member" name="member" class="col-7" onkeyup="checkInput()" />
+                </div>
+                <br />
+                <button id="removeMember" type="submit" class="btn btn-primary" disabled>Remove</button>
+                <br /><br />
+                @*<input type="submit" value="Login" class="btn btn-primary" />*@
+            </form>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Close_Shop_forever" asp-controller="SystemManager" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <div class="form-group">
+                <label class="col-4" for="shopname">Shop to delete</label>
+                <input id="shopname" name="shopname" class="col-7" onkeyup="checkInput1()" />
+            </div>
+            <br />
+            <button id="deleteshop" type="submit" class="btn btn-primary" disabled>Delete</button>
+            <br /><br />
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+    </div>
+</div>
+<br /><div id="message" class="alert"></div>
+
+
+
+
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var name = document.getElementById("member");
+            var button = document.getElementById("removeMember");
+            if (name.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkInput1() {
+            var name = document.getElementById("shopname");
+            var button = document.getElementById("deleteshop");
+            if (name.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+        setInterval(checkMessage, 1000);
+    </script>
+    }
+

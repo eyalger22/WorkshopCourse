@@ -1,0 +1,131 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+    var name = TempData["name"];
+    var price = TempData["price"];
+    var id = TempData["id"];
+    var category = TempData["category"];
+    var shop = TempData["shop"];
+    var description = TempData["description"];
+    var incart = TempData["incart"];
+}
+
+<h1>Welcom to product page</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            <p>Item name:</p>
+        </dt>
+        <dd class = "col-sm-10">
+            <p>@name</p>
+        </dd>
+        <dt class="col-sm-2">
+            <p>Price</p>
+        </dt>
+        <dd class="col-sm-10">
+            <p>@price</p>
+        </dd>
+        <dt class="col-sm-2">
+            <p>ID:</p>
+        </dt>
+        <dd class="col-sm-10">
+            <p>@id</p>
+        </dd>
+        <dt class="col-sm-2">
+            <p>Category:</p>
+        </dt>
+        <dd class="col-sm-10">
+            <p>@category</p>
+        </dd>
+
+        <dt class="col-sm-2">
+            <p>Shop name:</p>
+        </dt>
+        <dd class="col-sm-10">
+            <p>@shop</p>
+        </dd>
+        <dt class="col-sm-2">
+            <p>Description:</p>
+        </dt>
+        <dd class="col-sm-10">
+            <p>@description</p>
+        </dd>
+
+    </dl>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add_to_cart" asp-controller="ProductPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <div class="form-group">
+                <input id="amount" type="number" name="amount" class="col-8" placeholder="amount" onchange="checkInput()" />
+            </div>
+            <br />
+            <button id="add_button" type="submit" class="btn btn-primary" style="background-color: green;" disabled>Add to cart</button>
+            <br /><br />
+            
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+    </div>
+</div>
+@if (incart != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Remove_from_cart" asp-controller="ProductPage" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+                <button id="remove" type="submit" class="btn btn-primary" style="background-color: red;">Remove from cart</button>
+                <br /><br />
+            </form>
+        </div>
+    </div>
+}
+
+<div id="message" class="alert"></div>
+
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var amount = document.getElementById("amount");
+            var button = document.getElementById("add_button");
+            if (amount.value.trim().length > 0) {
+                button.disabled = false;
+            }
+            else {
+                button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+
+}

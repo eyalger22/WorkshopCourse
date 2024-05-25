@@ -1,0 +1,154 @@
+﻿@model Market.Pages.Modles.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+    if (Model != null && Model.mode == 2)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_LayoutMember.cshtml";
+    }
+    if (Model != null && Model.mode == 3)
+    {
+        Layout = "~/PresentationLayer/Views/Shared/_SystemManagerLayout.cshtml";
+    }
+}
+<head>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+
+<h1>Purchase page</h1>
+
+<br />
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Purchase" asp-controller="PurchaseCart" asp-route-id="@Model.id" asp-route-mode="@Model.mode" asp-route-shop="@Model.shop" asp-route-product="@Model.product" method="post">
+            <p>Purchase details</p>
+            <br />
+            <div class="form-group">
+                <label class="col-3" for="cardNumber">Card Number</label>
+                <input id="cardNumber" name="cardNumber" class="col-8" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="month">Month</label>
+                <input id="month" name="month" class="col-3" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="year">Year</label>
+                <input id="year" name="year" class="col-3" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-md-2" for="holder">Holder</label>
+                <input id="holder" name="holder" class="col-6" onkeyup="checkInput()" />
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label class="col-2" for="cvv">cvv</label>
+                <input id="cvv" name="cvv" class="col-2" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="userid">ID</label>
+                <input id="userid" name="userid" class="col-5" onkeyup="checkInput()" />
+            </div>
+            <br />
+            <p>Delivery details</p>
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="name">Name</label>
+                <input id="name" name="name" class="col-5" onkeyup="checkInput()" />
+            </div>
+
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="address">Address</label>
+                <input id="address" name="address" class="col-5" onkeyup="checkInput()" />
+            </div>
+
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="city">City</label>
+                <input id="city" name="city" class="col-5" onkeyup="checkInput()" />
+            </div>
+
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="country">Country</label>
+                <input id="country" name="country" class="col-5" onkeyup="checkInput()" />
+            </div>
+
+            <br />
+            <div class="form-group">
+                <label class="col-2" for="zip">Zip</label>
+                <input id="zip" name="zip" class="col-5" onkeyup="checkInput()" />
+            </div>
+
+            <br />
+            <br />
+            <button id="Button" type="submit" class="btn btn-primary" disabled>purchase</button>
+            <br /><br />
+            <div id="message" class="alert"></div>
+            @*<input type="submit" value="Login" class="btn btn-primary" />*@
+        </form>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    <script>
+        function checkInput() {
+            var cardNumber = document.getElementById("cardNumber");
+            var month = document.getElementById("month");
+            var year = document.getElementById("year");
+            var holder = document.getElementById("holder");
+            var cvv = document.getElementById("cvv");
+            var userid = document.getElementById("userid");
+            var name = document.getElementById("name");
+            var address = document.getElementById("address");
+            var city = document.getElementById("city");
+            var country = document.getElementById("country");
+            var zip = document.getElementById("zip");
+            var Button = document.getElementById("Button");
+            if (cardNumber.value.trim().length > 0 &&
+                month.value.trim().length > 0 &&
+                year.value.trim().length > 0 &&
+                holder.value.trim().length > 0 &&
+                cvv.value.trim().length > 0 &&
+                userid.value.trim().length > 0 &&
+                name.value.trim().length > 0 &&
+                country.value.trim().length > 0 &&
+                city.value.trim().length > 0 &&
+                zip.value.trim().length > 0) {
+                Button.disabled = false;
+            }
+            else {
+                Button.disabled = true;
+            }
+        }
+    </script>
+
+    <script>
+        function checkMessage() {
+            var messageElement = document.getElementById("message");
+            var message = "@TempData["Message"]";
+            var messageType = "@TempData["MessageType"]";
+            var messageType = "@TempData["MessageType"]";
+
+            if (message) {
+                messageElement.innerHTML = message;
+                if (messageType === "success") {
+                    messageElement.classList.add("alert-success");
+                } else if (messageType === "error") {
+                    messageElement.classList.add("alert-danger");
+                }
+            }
+        }
+
+        setInterval(checkMessage, 1000);
+    </script>
+}
+
